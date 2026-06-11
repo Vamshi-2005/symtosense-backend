@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result — SymtoSense</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Animated background orbs -->
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <span class="nav-icon">🧬</span>
+        <span class="nav-title">SymtoSense</span>
+    </div>
+    <a href="/" class="nav-back">← New Analysis</a>
+</nav>
+
+<main class="main-container result-container">
+
+    <!-- Result Hero -->
+    <div class="result-hero">
+        <div class="hero-tag">✅ Analysis Complete</div>
+        <h1 class="hero-title">Prediction Result</h1>
+    </div>
+
+    <!-- Primary Result Card -->
+    <div class="glass-card result-card">
+        <div class="result-main">
+
+            <!-- Confidence Ring -->
+            <div class="confidence-section">
+                <div class="ring-wrapper">
+                    <svg class="confidence-ring" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="52" />
+                        <circle class="ring-fill" cx="60" cy="60" r="52"
+                                th:style="'stroke-dasharray: 326.7; stroke-dashoffset: ' + ${326.7 - (326.7 * confidence / 100)}"/>
+                    </svg>
+                    <div class="ring-inner">
+                        <span class="ring-percent" th:text="${confidence + '%'}">0%</span>
+                        <span class="ring-label">confidence</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disease Info -->
+            <div class="disease-section">
+                <div class="disease-icon" th:text="${diseaseInfo['icon']}">🏥</div>
+                <h2 class="disease-name" th:text="${#strings.toUpperCase(#strings.replace(disease, '_', ' '))}">DISEASE</h2>
+                <div th:if="${diseaseInfo['severity']}" class="severity-badge"
+                     th:classappend="'severity-' + ${#strings.toLowerCase(diseaseInfo['severity'])}"
+                     th:text="'Severity: ' + ${diseaseInfo['severity']}">
+                    Severity
+                </div>
+                <p class="disease-description" th:text="${diseaseInfo['description']}">
+                    Disease description here.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matched Symptoms + Top Predictions Row -->
+    <div class="cards-row">
+
+        <!-- Matched Symptoms -->
+        <div class="glass-card info-card" th:if="${matchedSymptoms != null and !matchedSymptoms.isEmpty()}">
+            <div class="info-card-header">
+                <span class="info-icon">🎯</span>
+                <h3>Matched Symptoms</h3>
+            </div>
+            <div class="matched-chips">
+                <span class="matched-chip"
+                      th:each="s : ${matchedSymptoms}"
+                      th:text="${#strings.replace(s, '_', ' ')}">symptom</span>
+            </div>
+        </div>
+
+        <!-- Top 3 Predictions -->
+        <div class="glass-card info-card" th:if="${topPredictions != null and !topPredictions.isEmpty()}">
+            <div class="info-card-header">
+                <span class="info-icon">📊</span>
+                <h3>Top Predictions</h3>
+            </div>
+            <div class="predictions-list">
+                <div class="prediction-item" th:each="p, iter : ${topPredictions}">
+                    <div class="pred-rank" th:text="${iter.index + 1}">1</div>
+                    <div class="pred-info">
+                        <span class="pred-name" th:text="${#strings.replace(p['disease'], '_', ' ')}">disease</span>
+                        <div class="pred-bar-wrap">
+                            <div class="pred-bar"
+                                 th:attr="style='width:' + ${p['confidence']} + '%'"></div>
+                        </div>
+                    </div>
+                    <span class="pred-score" th:text="${p['confidence'] + '%'}">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disease Details Grid -->
+    <div class="glass-card details-card">
+        <div class="details-header">
+            <span>📋</span>
+            <h3>Condition Details</h3>
+        </div>
+        <div class="details-grid">
+            <div class="detail-item" th:if="${diseaseInfo['symptoms']}">
+                <div class="detail-label">🤒 Symptoms</div>
+                <div class="detail-value" th:text="${diseaseInfo['symptoms']}">—</div>
+            </div>
+            <div class="detail-item" th:if="${diseaseInfo['causes']}">
+                <div class="detail-label">🔬 Causes</div>
+                <div class="detail-value" th:text="${diseaseInfo['causes']}">—</div>
+            </div>
+            <div class="detail-item" th:if="${diseaseInfo['precautions']}">
+                <div class="detail-label">🛡️ Precautions</div>
+                <div class="detail-value" th:text="${diseaseInfo['precautions']}">—</div>
+            </div>
+            <div class="detail-item" th:if="${diseaseInfo['medicines']}">
+                <div class="detail-label">💊 Common Medicines</div>
+                <div class="detail-value" th:text="${diseaseInfo['medicines']}">—</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Finder -->
+    <div class="glass-card doctor-card" th:if="${specialist != null}">
+        <div class="doctor-header">
+            <span class="doctor-header-icon">🏥</span>
+            <h3>Recommended Specialist</h3>
+        </div>
+        <div class="doctor-content">
+            <div class="doctor-info">
+                <span class="doctor-icon" th:text="${specialist['icon']}">🏥</span>
+                <div class="doctor-text">
+                    <div class="doctor-type" th:text="${specialist['specialist']}">General Physician</div>
+                    <div class="doctor-desc">Based on your predicted condition, we recommend consulting this specialist</div>
+                </div>
+            </div>
+            <a class="find-doctor-btn"
+               th:href="'https://www.google.com/maps/search/' + ${specialist['search']}"
+               target="_blank">
+                📍 Find Near Me
+            </a>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-row">
+        <a href="/" class="btn-primary">← Analyze Again</a>
+        <a th:href="@{/details(disease=${disease})}" class="btn-secondary">Full Details →</a>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="disclaimer">
+        ⚠️ This is an AI prediction for educational purposes only. Consult a qualified healthcare professional for diagnosis and treatment.
+    </p>
+
+</main>
+
+<script th:src="@{/js/app.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ── Confidence Ring Animation ──────────────────
+        const ring = document.querySelector('.ring-fill');
+        if (ring) {
+            // Get the target offset from inline style
+            const style = ring.getAttribute('style') || '';
+            const match = style.match(/stroke-dashoffset:\s*([\d.]+)/);
+            const targetOffset = match ? parseFloat(match[1]) : 0;
+
+            // Start from full (empty ring) and animate to target
+            ring.style.strokeDashoffset = '326.7';
+            ring.style.transition = 'none';
+
+            setTimeout(() => {
+                ring.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                ring.style.strokeDashoffset = targetOffset;
+            }, 300);
+        }
+
+        // ── Counter Animation for percentage ──────────
+        const percentEl = document.querySelector('.ring-percent');
+        if (percentEl) {
+            const target = parseFloat(percentEl.textContent);
+            let current = 0;
+            const duration = 1800;
+            const steps = 60;
+            const increment = target / steps;
+            const interval = duration / steps;
+
+            percentEl.textContent = '0%';
+
+            const counter = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(counter);
+                }
+                percentEl.textContent = current.toFixed(1) + '%';
+            }, interval);
+        }
+
+        // ── Prediction Bars Animation ──────────────────
+        document.querySelectorAll('.pred-bar').forEach((bar, i) => {
+            const targetWidth = bar.style.width;
+            bar.style.width = '0';
+            bar.style.transition = 'none';
+            setTimeout(() => {
+                bar.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                bar.style.width = targetWidth;
+            }, 400 + (i * 150));
+        });
+
+        // ── Ring color based on confidence ────────────
+        const confidenceText = document.querySelector('.ring-percent');
+        if (confidenceText && ring) {
+            const val = parseFloat(confidenceText.textContent);
+            if (val >= 70) {
+                ring.style.stroke = '#22c55e';       // green
+            } else if (val >= 40) {
+                ring.style.stroke = '#4f8ef7';       // blue
+            } else {
+                ring.style.stroke = '#f59e0b';       // amber
+            }
+        }
+    });
+</script>
+</body>
+</html>

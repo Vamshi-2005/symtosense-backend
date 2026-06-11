@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${disease} + ' — SymtoSense'">Details — SymtoSense</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <span class="nav-icon">🧬</span>
+        <span class="nav-title">SymtoSense</span>
+    </div>
+    <a href="/" class="nav-back">← Home</a>
+</nav>
+
+<main class="main-container details-page">
+    <div class="result-hero">
+        <div class="hero-tag" th:text="${diseaseInfo['icon'] + ' Condition Guide'}">🏥 Condition Guide</div>
+        <h1 class="hero-title" th:text="${#strings.replace(#strings.toUpperCase(disease), '_', ' ')}">DISEASE NAME</h1>
+        <div th:if="${diseaseInfo['severity']}"
+             class="severity-badge hero-severity"
+             th:classappend="'severity-' + ${#strings.toLowerCase(diseaseInfo['severity'])}"
+             th:text="${'Severity Level: ' + diseaseInfo['severity']}">Severity</div>
+    </div>
+
+    <div class="glass-card details-hero-card">
+        <p class="details-description" th:text="${diseaseInfo['description']}">Description</p>
+    </div>
+
+    <div class="details-full-grid">
+        <div class="glass-card detail-full-card">
+            <div class="detail-full-icon">🤒</div>
+            <h3>Symptoms</h3>
+            <p th:text="${diseaseInfo['symptoms']}">—</p>
+        </div>
+        <div class="glass-card detail-full-card">
+            <div class="detail-full-icon">🔬</div>
+            <h3>Causes</h3>
+            <p th:text="${diseaseInfo['causes']}">—</p>
+        </div>
+        <div class="glass-card detail-full-card">
+            <div class="detail-full-icon">🛡️</div>
+            <h3>Precautions</h3>
+            <p th:text="${diseaseInfo['precautions']}">—</p>
+        </div>
+        <div class="glass-card detail-full-card">
+            <div class="detail-full-icon">💊</div>
+            <h3>Common Medicines</h3>
+            <p th:text="${diseaseInfo['medicines']}">—</p>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <a href="/" class="btn-primary">Check Another Symptom →</a>
+    </div>
+
+    <p class="disclaimer">
+        ⚠️ This information is for educational purposes only. Always consult a qualified healthcare professional.
+    </p>
+</main>
+
+</body>
+</html>

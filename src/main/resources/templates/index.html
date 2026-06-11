@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SymtoSense — AI Disease Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Animated background orbs -->
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <span class="nav-icon">🧬</span>
+        <span class="nav-title">SymtoSense</span>
+    </div>
+    <div class="nav-badge">AI-Powered</div>
+</nav>
+
+<!-- Hero Section -->
+<main class="main-container">
+    <div class="hero-section">
+        <div class="hero-tag">🤖 Machine Learning · Random Forest</div>
+        <h1 class="hero-title">
+            What's your body<br>
+            <span class="gradient-text">telling you?</span>
+        </h1>
+        <p class="hero-subtitle">
+            Describe your symptoms and our AI model will identify potential conditions
+            with confidence scoring — in seconds.
+        </p>
+    </div>
+
+    <!-- Error Alert -->
+    <div th:if="${error}" class="alert-error">
+        <span class="alert-icon">⚠️</span>
+        <span th:text="${error}">Error message</span>
+    </div>
+
+    <!-- Main Card -->
+    <div class="glass-card main-card">
+        <div class="card-header">
+            <h2 class="card-title">Enter Your Symptoms</h2>
+            <p class="card-subtitle">Type symptoms separated by commas, or click the tags below</p>
+        </div>
+
+        <form action="/predict" method="post" id="symptomForm">
+            <!-- Input Area -->
+            <div class="input-wrapper">
+                <div class="input-icon">🔍</div>
+                <input
+                    type="text"
+                    name="symptoms"
+                    id="symptomInput"
+                    class="symptom-input"
+                    placeholder="e.g. fever, headache, cough"
+                    autocomplete="off"
+                    required
+                />
+                <button type="submit" class="analyze-btn" id="analyzeBtn">
+                    <span class="btn-text">Analyze</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+
+            <!-- Quick Tags -->
+            <div class="tags-section">
+                <span class="tags-label">Common symptoms:</span>
+                <div class="symptom-tags" id="symptomTags">
+                    <button type="button" class="tag" data-symptom="fever">🌡️ Fever</button>
+                    <button type="button" class="tag" data-symptom="cough">😮‍💨 Cough</button>
+                    <button type="button" class="tag" data-symptom="headache">🤕 Headache</button>
+                    <button type="button" class="tag" data-symptom="fatigue">😴 Fatigue</button>
+                    <button type="button" class="tag" data-symptom="nausea">🤢 Nausea</button>
+                    <button type="button" class="tag" data-symptom="vomiting">🤮 Vomiting</button>
+                    <button type="button" class="tag" data-symptom="diarrhea">💊 Diarrhea</button>
+                    <button type="button" class="tag" data-symptom="sore_throat">👅 Sore Throat</button>
+                    <button type="button" class="tag" data-symptom="body_ache">💪 Body Ache</button>
+                    <button type="button" class="tag" data-symptom="chills">🥶 Chills</button>
+                    <button type="button" class="tag" data-symptom="rash">🔴 Rash</button>
+                    <button type="button" class="tag" data-symptom="dizziness">😵 Dizziness</button>
+                    <button type="button" class="tag" data-symptom="shortness_of_breath">🌬️ Shortness of Breath</button>
+                    <button type="button" class="tag" data-symptom="chest_pain">💔 Chest Pain</button>
+                    <button type="button" class="tag" data-symptom="joint_pain">🦴 Joint Pain</button>
+                    <button type="button" class="tag" data-symptom="back_pain">🔙 Back Pain</button>
+                    <button type="button" class="tag" data-symptom="runny_nose">🤧 Runny Nose</button>
+                    <button type="button" class="tag" data-symptom="sweating">💦 Sweating</button>
+                    <button type="button" class="tag" data-symptom="loss_of_appetite">🍽️ Loss of Appetite</button>
+                    <button type="button" class="tag" data-symptom="swollen_lymph_nodes">🫀 Swollen Glands</button>
+                    <button type="button" class="tag" data-symptom="itching">🤚 Itching</button>
+                    <button type="button" class="tag" data-symptom="jaundice">🟡 Jaundice</button>
+                    <button type="button" class="tag" data-symptom="muscle_cramps">⚡ Muscle Cramps</button>
+                    <button type="button" class="tag" data-symptom="eye_redness">👁️ Eye Redness</button>
+                    <button type="button" class="tag" data-symptom="ear_pain">👂 Ear Pain</button>
+                    <button type="button" class="tag" data-symptom="neck_stiffness">🔒 Neck Stiffness</button>
+                    <button type="button" class="tag" data-symptom="painful_urination">🚽 Painful Urination</button>
+                    <button type="button" class="tag" data-symptom="frequent_urination">🔄 Frequent Urination</button>
+                    <button type="button" class="tag" data-symptom="bloating">🎈 Bloating</button>
+                    <button type="button" class="tag" data-symptom="constipation">⛔ Constipation</button>
+                    <button type="button" class="tag" data-symptom="hair_loss">💇 Hair Loss</button>
+                    <button type="button" class="tag" data-symptom="weight_loss">⚖️ Weight Loss</button>
+                    <button type="button" class="tag" data-symptom="weight_gain">📈 Weight Gain</button>
+                    <button type="button" class="tag" data-symptom="anxiety">😰 Anxiety</button>
+                    <button type="button" class="tag" data-symptom="palpitations">💓 Palpitations</button>
+                    <button type="button" class="tag" data-symptom="vision_blurred">👓 Blurred Vision</button>
+                    <button type="button" class="tag" data-symptom="skin_peeling">🩹 Skin Peeling</button>
+                    <button type="button" class="tag" data-symptom="night_sweats">🌙 Night Sweats</button>
+                    <button type="button" class="tag" data-symptom="abdominal_pain">🫃 Abdominal Pain</button>
+                    <button type="button" class="tag" data-symptom="sneezing">🤧 Sneezing</button>
+                </div>
+            </div>
+
+            <!-- Selected symptoms preview -->
+            <div class="selected-preview" id="selectedPreview" style="display:none;">
+                <span class="selected-label">Selected:</span>
+                <div class="selected-chips" id="selectedChips"></div>
+                <button type="button" class="clear-btn" id="clearBtn">✕ Clear all</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- History Section -->
+    <div id="historySection" class="glass-card main-card" style="display:none; padding: 24px 36px;">
+        <div class="history-header">
+            <span class="history-title">🕐 Recent Searches</span>
+            <button class="history-clear" onclick="localStorage.removeItem('symptom_history'); renderHistory();">Clear</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row">
+        <div class="stat-item">
+            <span class="stat-num">30</span>
+            <span class="stat-label">Diseases</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">40</span>
+            <span class="stat-label">Symptoms</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">ML</span>
+            <span class="stat-label">Powered</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">~1s</span>
+            <span class="stat-label">Response</span>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="disclaimer">
+        ⚠️ SymtoSense is for educational purposes only. Always consult a qualified healthcare professional for medical advice.
+    </p>
+</main>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

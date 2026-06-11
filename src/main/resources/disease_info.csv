@@ -1,0 +1,7 @@
+disease,description,precaution,medicine,severity,image
+flu,Common viral infection affecting respiratory system,Take rest drink fluids paracetamol,Paracetamol rest hydration,Mild,https://cdn-icons-png.flaticon.com/512/2966/2966327.png
+dengue,Mosquito borne viral infection causing high fever,Drink fluids avoid mosquito bites consult doctor,No self medication hospital care,Severe,https://cdn-icons-png.flaticon.com/512/6195/6195700.png
+pneumonia,Lung infection causing cough and breathing difficulty,Consult doctor take antibiotics rest,Antibiotics oxygen support,Severe,https://cdn-icons-png.flaticon.com/512/3050/3050525.png
+diabetes,Chronic condition affecting blood sugar levels,Maintain diet exercise regular checkup,Insulin medication,Moderate,https://cdn-icons-png.flaticon.com/512/3076/3076129.png
+food_poisoning,Infection caused by contaminated food,Drink fluids avoid outside food,ORS antibiotics,Moderate,https://cdn-icons-png.flaticon.com/512/1046/1046784.png
+bronchitis,Inflammation of bronchial tubes causing cough,Avoid smoking take rest,Inhalers cough syrup,Mild,https://cdn-icons-png.flaticon.com/512/2966/2966489.png
